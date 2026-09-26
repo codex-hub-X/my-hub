@@ -30,7 +30,7 @@ local TogStroke = Instance.new("UIStroke", Tog)
 TogStroke.Color = Color3.fromRGB(255, 215, 80)
 TogStroke.Thickness = 1.8
 
--- MAIN FRAME (CÂN CHỈNH KÍCH THƯỚC CHUẨN: NGANG 580, CAO 320)
+-- MAIN FRAME (NGANG 580, CAO 320)
 local Main = Instance.new("Frame", SG)
 Main.Size = UDim2.new(0, 580, 0, 320)
 Main.Position = UDim2.new(0.5, -290, 0.5, -160)
@@ -144,59 +144,12 @@ local function CreateTab(name, active)
 	return TabContent
 end
 
--- TẠO TAB MẪU
-local Tab1 = CreateTab("Main", true)
-local Tab2 = CreateTab("Player", false)
-local Tab3 = CreateTab("Settings", false)
+-- TẠO CÁC TAB KHUNG TRỐNG
+local TabMain = CreateTab("Main", true)
+local TabPlayer = CreateTab("Player", false)
+local TabSettings = CreateTab("Settings", false)
 
--- LINH KIỆN FRAMEWORK UI
-local Framework = {}
-
-function Framework:AddButton(parent, text, callback)
-	local Btn = Instance.new("TextButton", parent)
-	Btn.Size = UDim2.new(1, -10, 0, 35)
-	Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-	Btn.Text = text
-	Btn.TextColor3 = Color3.fromRGB(240, 240, 250)
-	Btn.Font = Enum.Font.GothamMedium
-	Btn.TextSize = 12
-	Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
-	Btn.MouseButton1Click:Connect(function() callback() end)
-end
-
-function Framework:AddToggle(parent, text, callback)
-	local state = false
-	local Btn = Instance.new("TextButton", parent)
-	Btn.Size = UDim2.new(1, -10, 0, 35)
-	Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-	Btn.Text = text .. " : OFF"
-	Btn.TextColor3 = Color3.fromRGB(255, 100, 100)
-	Btn.Font = Enum.Font.GothamBold
-	Btn.TextSize = 12
-	Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
-
-	Btn.MouseButton1Click:Connect(function()
-		state = not state
-		Btn.Text = text .. (state and " : ON" or " : OFF")
-		Btn.TextColor3 = state and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100)
-		callback(state)
-	end)
-end
-
--- VÍ DỤ NÚT MẪU
-Framework:AddButton(Tab1, "📌 Button Sample 1", function()
-	print("Button 1 Clicked")
-end)
-
-Framework:AddToggle(Tab1, "⚡ Toggle Sample 1", function(state)
-	print("Toggle State:", state)
-end)
-
-Framework:AddButton(Tab2, "🏃 Speed Hack Sample", function()
-	print("Speed Clicked")
-end)
-
--- LOGIC MỞ / ĐÓNG MENU
+-- ✨ HIỆU ỨNG MỞ/ĐÓNG MƯỢT MÀ (MỜ DẦN + PHÓNG TO NẸP)
 local isOpen = true
 local isBusy = false
 
@@ -207,16 +160,20 @@ Tog.MouseButton1Click:Connect(function()
 	
 	if isOpen then
 		Main.Visible = true
-		Main.Size = UDim2.new(0, 0, 0, 320)
-		Main.Position = UDim2.new(0.5, 0, 0.5, -160)
-		TS:Create(Main, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+		Main.BackgroundTransparency = 1
+		Main.Size = UDim2.new(0, 550, 0, 300)
+		Main.Position = UDim2.new(0.5, -275, 0.5, -150)
+		
+		TS:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			BackgroundTransparency = 0.15,
 			Size = UDim2.new(0, 580, 0, 320),
 			Position = UDim2.new(0.5, -290, 0.5, -160)
 		}):Play()
 	else
-		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Size = UDim2.new(0, 0, 0, 320),
-			Position = UDim2.new(0.5, 0, 0.5, -160)
+		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(0, 550, 0, 300),
+			Position = UDim2.new(0.5, -275, 0.5, -150)
 		})
 		t:Play()
 		t.Completed:Connect(function() Main.Visible = false end)
@@ -225,4 +182,3 @@ Tog.MouseButton1Click:Connect(function()
 	task.wait(0.3)
 	isBusy = false
 end)
-
