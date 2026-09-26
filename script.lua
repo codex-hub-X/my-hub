@@ -1,26 +1,19 @@
 local Players = game:GetService("Players")
 local TS = game:GetService("TweenService")
-local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 local LP = Players.LocalPlayer or Players.PlayerAdded:Wait()
 local PlayerGui = LP:WaitForChild("PlayerGui")
 
-if PlayerGui:FindFirstChild("CodexUI_V8") then 
-	PlayerGui.CodexUI_V8:Destroy() 
+if PlayerGui:FindFirstChild("CodexUI_V8_Template") then 
+	PlayerGui.CodexUI_V8_Template:Destroy() 
 end
 
--- =================================================================
--- ⚙️ CÀI ĐẶT KIỂU HIỆU ỨNG MỞ / ĐÓNG MENU (ĐỔI SỐ TỪ 1 ĐẾN 5 TẠI ĐÂY)
--- 1: Flip3D | 2: PopOut | 3: SlideRight | 4: SlideUp | 5: Fade
-local CURRENT_ANIMATION = 1 
--- =================================================================
-
 local SG = Instance.new("ScreenGui", PlayerGui)
-SG.Name = "CodexUI_V8"
+SG.Name = "CodexUI_V8_Template"
 SG.ResetOnSpawn = false
 
--- NÚT MỞ MENU TRÒN NỔI (TOGGLE BUTTON)
+-- TOGGLE BUTTON (NÚT TRÒN MỞ MENU)
 local Tog = Instance.new("TextButton", SG)
 Tog.Size = UDim2.new(0, 50, 0, 50)
 Tog.Position = UDim2.new(0, 20, 0.45, 0)
@@ -37,18 +30,17 @@ local TogStroke = Instance.new("UIStroke", Tog)
 TogStroke.Color = Color3.fromRGB(255, 215, 80)
 TogStroke.Thickness = 1.8
 
--- KHUNG CHÍNH (GLASSMORPHISM CARD V8)
+-- MAIN FRAME (CÂN CHỈNH KÍCH THƯỚC CHUẨN: NGANG 580, CAO 320)
 local Main = Instance.new("Frame", SG)
-Main.Size = UDim2.new(0, 390, 0, 490)
-Main.Position = UDim2.new(0.5, -195, 0.5, -245)
+Main.Size = UDim2.new(0, 580, 0, 320)
+Main.Position = UDim2.new(0.5, -290, 0.5, -160)
 Main.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
-Main.BackgroundTransparency = 0.2
+Main.BackgroundTransparency = 0.15
 Main.Active = true
 Main.Draggable = true
-Main.ClipsDescendants = true
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 20)
+Main.ClipsDescendants = false
+Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 16)
 
--- Viền Vàng Kim Ánh Sáng Xoay (Glow Border)
 local MainStroke = Instance.new("UIStroke", Main)
 MainStroke.Thickness = 2
 MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -64,146 +56,172 @@ RunService.RenderStepped:Connect(function()
 	Gradient.Rotation = (Gradient.Rotation + 1.2) % 360
 end)
 
-local function CreateInput(parent, placeholder, isPassword)
-	local boxFrame = Instance.new("Frame", parent)
-	boxFrame.Size = UDim2.new(1, 0, 0, 40)
-	boxFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-	boxFrame.BackgroundTransparency = 0.3
-	Instance.new("UICorner", boxFrame).CornerRadius = UDim.new(0, 10)
-	
-	local stroke = Instance.new("UIStroke", boxFrame)
-	stroke.Color = Color3.fromRGB(45, 45, 55)
-	stroke.Thickness = 1
+-- BANNER ANIME
+local AnimeBanner = Instance.new("ImageLabel", Main)
+AnimeBanner.Name = "AnimeBanner"
+AnimeBanner.Size = UDim2.new(1, 0, 0, 70)
+AnimeBanner.Position = UDim2.new(0, 0, 0, 0)
+AnimeBanner.BackgroundTransparency = 1
+AnimeBanner.Image = "rbxassetid://10620641162"
+AnimeBanner.ScaleType = Enum.ScaleType.Crop
+AnimeBanner.ClipsDescendants = true
+Instance.new("UICorner", AnimeBanner).CornerRadius = UDim.new(0, 16)
 
-	local input = Instance.new("TextBox", boxFrame)
-	input.Size = UDim2.new(1, -20, 1, 0)
-	input.Position = UDim2.new(0, 10, 0, 0)
-	input.PlaceholderText = placeholder
-	input.PlaceholderColor3 = Color3.fromRGB(110, 110, 125)
-	input.Text = ""
-	input.TextColor3 = Color3.fromRGB(245, 245, 255)
-	input.Font = Enum.Font.GothamMedium
-	input.TextSize = 12
-	input.TextXAlignment = Enum.TextXAlignment.Left
-	input.BackgroundTransparency = 1
+-- NHÂN VẬT ANIME ĐỨNG HÔNG
+local AnimeChar = Instance.new("ImageLabel", Main)
+AnimeChar.Name = "AnimeChar"
+AnimeChar.Size = UDim2.new(0, 130, 0, 190)
+AnimeChar.Position = UDim2.new(1, -25, 0.5, -80)
+AnimeChar.BackgroundTransparency = 1
+AnimeChar.Image = "rbxassetid://10620641162"
+AnimeChar.ScaleType = Enum.ScaleType.Fit
+AnimeChar.ZIndex = 10
 
-	input.Focused:Connect(function()
-		TS:Create(stroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(255, 215, 80)}):Play()
+-- HEADER TITLE
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.new(1, -20, 0, 30)
+Title.Position = UDim2.new(0, 15, 0, 8)
+Title.Text = "⚡ CODEX HUB V8 - FRAMEWORK"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.BackgroundTransparency = 1
+Title.ZIndex = 2
+
+-- SIDEBAR TABS
+local Sidebar = Instance.new("Frame", Main)
+Sidebar.Size = UDim2.new(0, 130, 1, -80)
+Sidebar.Position = UDim2.new(0, 10, 0, 75)
+Sidebar.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
+Sidebar.BackgroundTransparency = 0.4
+Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 10)
+
+local SideLayout = Instance.new("UIListLayout", Sidebar)
+SideLayout.Padding = UDim.new(0, 6)
+SideLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- CONTAINER NỘI DUNG TABS
+local ContentContainer = Instance.new("Frame", Main)
+ContentContainer.Size = UDim2.new(1, -250, 1, -80)
+ContentContainer.Position = UDim2.new(0, 150, 0, 75)
+ContentContainer.BackgroundTransparency = 1
+
+local Tabs = {}
+local function CreateTab(name, active)
+	local TabBtn = Instance.new("TextButton", Sidebar)
+	TabBtn.Size = UDim2.new(0.9, 0, 0, 32)
+	TabBtn.BackgroundColor3 = active and Color3.fromRGB(255, 215, 80) or Color3.fromRGB(25, 25, 35)
+	TabBtn.Text = name
+	TabBtn.TextColor3 = active and Color3.fromRGB(15, 15, 20) or Color3.fromRGB(200, 200, 210)
+	TabBtn.Font = Enum.Font.GothamBold
+	TabBtn.TextSize = 12
+	Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 8)
+
+	local TabContent = Instance.new("ScrollingFrame", ContentContainer)
+	TabContent.Size = UDim2.new(1, 0, 1, 0)
+	TabContent.BackgroundTransparency = 1
+	TabContent.Visible = active
+	TabContent.ScrollBarThickness = 3
+	TabContent.CanvasSize = UDim2.new(0, 0, 2, 0)
+
+	local Layout = Instance.new("UIListLayout", TabContent)
+	Layout.Padding = UDim.new(0, 8)
+
+	Tabs[name] = {Btn = TabBtn, Content = TabContent}
+
+	TabBtn.MouseButton1Click:Connect(function()
+		for _, t in pairs(Tabs) do
+			t.Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+			t.Btn.TextColor3 = Color3.fromRGB(200, 200, 210)
+			t.Content.Visible = false
+		end
+		TabBtn.BackgroundColor3 = Color3.fromRGB(255, 215, 80)
+		TabBtn.TextColor3 = Color3.fromRGB(15, 15, 20)
+		TabContent.Visible = true
 	end)
-	input.FocusLost:Connect(function()
-		TS:Create(stroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(45, 45, 55)}):Play()
-	end)
 
-	return boxFrame
+	return TabContent
 end
 
--- TAB CONTROLLER
-local PageSignIn = Instance.new("Frame", Main)
-PageSignIn.Size = UDim2.new(1, -40, 1, -40)
-PageSignIn.Position = UDim2.new(0, 20, 0, 20)
-PageSignIn.BackgroundTransparency = 1
+-- TẠO TAB MẪU
+local Tab1 = CreateTab("Main", true)
+local Tab2 = CreateTab("Player", false)
+local Tab3 = CreateTab("Settings", false)
 
-local Title1 = Instance.new("TextLabel", PageSignIn)
-Title1.Size = UDim2.new(1, 0, 0, 32)
-Title1.Text = "Welcome Back"
-Title1.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title1.Font = Enum.Font.GothamBold
-Title1.TextSize = 22
-Title1.TextXAlignment = Enum.TextXAlignment.Left
-Title1.BackgroundTransparency = 1
+-- LINH KIỆN FRAMEWORK UI
+local Framework = {}
 
-local Layout1 = Instance.new("UIListLayout", PageSignIn)
-Layout1.Padding = UDim.new(0, 12)
-Layout1.SortOrder = Enum.SortOrder.LayoutOrder
+function Framework:AddButton(parent, text, callback)
+	local Btn = Instance.new("TextButton", parent)
+	Btn.Size = UDim2.new(1, -10, 0, 35)
+	Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+	Btn.Text = text
+	Btn.TextColor3 = Color3.fromRGB(240, 240, 250)
+	Btn.Font = Enum.Font.GothamMedium
+	Btn.TextSize = 12
+	Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
+	Btn.MouseButton1Click:Connect(function() callback() end)
+end
 
-CreateInput(PageSignIn, "Username / Email").LayoutOrder = 1
-CreateInput(PageSignIn, "Password", true).LayoutOrder = 2
+function Framework:AddToggle(parent, text, callback)
+	local state = false
+	local Btn = Instance.new("TextButton", parent)
+	Btn.Size = UDim2.new(1, -10, 0, 35)
+	Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+	Btn.Text = text .. " : OFF"
+	Btn.TextColor3 = Color3.fromRGB(255, 100, 100)
+	Btn.Font = Enum.Font.GothamBold
+	Btn.TextSize = 12
+	Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
 
-local BtnSignIn = Instance.new("TextButton", PageSignIn)
-BtnSignIn.Size = UDim2.new(1, 0, 0, 42)
-BtnSignIn.BackgroundColor3 = Color3.fromRGB(255, 215, 80)
-BtnSignIn.Text = "LOGIN NOW ➔"
-BtnSignIn.TextColor3 = Color3.fromRGB(12, 12, 16)
-BtnSignIn.Font = Enum.Font.GothamBold
-BtnSignIn.TextSize = 13
-BtnSignIn.LayoutOrder = 3
-Instance.new("UICorner", BtnSignIn).CornerRadius = UDim.new(0, 10)
+	Btn.MouseButton1Click:Connect(function()
+		state = not state
+		Btn.Text = text .. (state and " : ON" or " : OFF")
+		Btn.TextColor3 = state and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 100, 100)
+		callback(state)
+	end)
+end
 
--- HỆ THỐNG HIỆU ỨNG MỞ/ĐÓNG (ANIMATIONS)
+-- VÍ DỤ NÚT MẪU
+Framework:AddButton(Tab1, "📌 Button Sample 1", function()
+	print("Button 1 Clicked")
+end)
+
+Framework:AddToggle(Tab1, "⚡ Toggle Sample 1", function(state)
+	print("Toggle State:", state)
+end)
+
+Framework:AddButton(Tab2, "🏃 Speed Hack Sample", function()
+	print("Speed Clicked")
+end)
+
+-- LOGIC MỞ / ĐÓNG MENU
 local isOpen = true
 local isBusy = false
-
-local function OpenMenu()
-	Main.Visible = true
-	if CURRENT_ANIMATION == 1 then -- Flip 3D
-		Main.Size = UDim2.new(0, 0, 0, 490)
-		Main.Position = UDim2.new(0.5, 0, 0.5, -245)
-		TS:Create(Main, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-			Size = UDim2.new(0, 390, 0, 490),
-			Position = UDim2.new(0.5, -195, 0.5, -245)
-		}):Play()
-	elseif CURRENT_ANIMATION == 2 then -- PopOut
-		Main.Size = UDim2.new(0, 0, 0, 0)
-		Main.Position = UDim2.new(0.5, 0, 0.5, 0)
-		TS:Create(Main, TweenInfo.new(0.4, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {
-			Size = UDim2.new(0, 390, 0, 490),
-			Position = UDim2.new(0.5, -195, 0.5, -245)
-		}):Play()
-	elseif CURRENT_ANIMATION == 3 then -- Slide Right
-		Main.Position = UDim2.new(0, -400, 0.5, -245)
-		TS:Create(Main, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-			Position = UDim2.new(0.5, -195, 0.5, -245)
-		}):Play()
-	elseif CURRENT_ANIMATION == 4 then -- Slide Up
-		Main.Position = UDim2.new(0.5, -195, 1, 50)
-		TS:Create(Main, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-			Position = UDim2.new(0.5, -195, 0.5, -245)
-		}):Play()
-	elseif CURRENT_ANIMATION == 5 then -- Fade
-		Main.BackgroundTransparency = 1
-		TS:Create(Main, TweenInfo.new(0.3), {BackgroundTransparency = 0.2}):Play()
-	end
-end
-
-local function CloseMenu()
-	if CURRENT_ANIMATION == 1 then -- Flip 3D
-		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Size = UDim2.new(0, 0, 0, 490),
-			Position = UDim2.new(0.5, 0, 0.5, -245)
-		})
-		t:Play()
-		t.Completed:Connect(function() Main.Visible = false end)
-	elseif CURRENT_ANIMATION == 2 then -- PopOut
-		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
-			Size = UDim2.new(0, 0, 0, 0),
-			Position = UDim2.new(0.5, 0, 0.5, 0)
-		})
-		t:Play()
-		t.Completed:Connect(function() Main.Visible = false end)
-	elseif CURRENT_ANIMATION == 3 then -- Slide Right
-		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-			Position = UDim2.new(0, -400, 0.5, -245)
-		})
-		t:Play()
-		t.Completed:Connect(function() Main.Visible = false end)
-	elseif CURRENT_ANIMATION == 4 then -- Slide Up
-		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-			Position = UDim2.new(0.5, -195, 1, 50)
-		})
-		t:Play()
-		t.Completed:Connect(function() Main.Visible = false end)
-	elseif CURRENT_ANIMATION == 5 then -- Fade
-		local t = TS:Create(Main, TweenInfo.new(0.25), {BackgroundTransparency = 1})
-		t:Play()
-		t.Completed:Connect(function() Main.Visible = false end)
-	end
-end
 
 Tog.MouseButton1Click:Connect(function()
 	if isBusy then return end
 	isBusy = true
 	isOpen = not isOpen
-	if isOpen then OpenMenu() else CloseMenu() end
+	
+	if isOpen then
+		Main.Visible = true
+		Main.Size = UDim2.new(0, 0, 0, 320)
+		Main.Position = UDim2.new(0.5, 0, 0.5, -160)
+		TS:Create(Main, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+			Size = UDim2.new(0, 580, 0, 320),
+			Position = UDim2.new(0.5, -290, 0.5, -160)
+		}):Play()
+	else
+		local t = TS:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			Size = UDim2.new(0, 0, 0, 320),
+			Position = UDim2.new(0.5, 0, 0.5, -160)
+		})
+		t:Play()
+		t.Completed:Connect(function() Main.Visible = false end)
+	end
+	
 	task.wait(0.3)
 	isBusy = false
 end)
